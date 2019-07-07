@@ -28,7 +28,7 @@ public class EchoClient {
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(eventLoopGroup)
                 //指定使用nio进行网络通信
-                .channel(NioSocketChannel.class);//把线程组传入
+                .channel(NioSocketChannel.class);//把线程组传入//
 
         
     }

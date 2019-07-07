@@ -1,9 +1,12 @@
 package cn.enjoy.netty;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.net.InetSocketAddress;
 
 
 /**
@@ -26,12 +29,18 @@ public class EchoClient {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 //启动必须，做一些初始化工作
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(eventLoopGroup)
+        bootstrap.group(eventLoopGroup)//把线程组传入
                 //指定使用nio进行网络通信
-                .channel(NioSocketChannel.class);//把线程组传入
-        
+                .channel(NioSocketChannel.class)
+                /*链接端口ip建立链接*/
+               .remoteAddress(new InetSocketAddress(host,port))
+                //入站处理器
+               .handler(new EchoClientHabdler());
+               //链接并且阻塞，直到链接完成
+        ChannelFuture f = bootstrap.connect().sync();
+        //阻塞直到发生关闭事件
+        f.channel().closeFuture().sync();
 
-        
     }
     public static void main(String[] args) throws InterruptedException {
         new EchoClient("127.0.0.1",9999).start();

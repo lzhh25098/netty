@@ -31,6 +31,8 @@ public class EchoClient {
                 .channel(NioSocketChannel.class);//把线程组传入
 
         
+
+        
     }
     public static void main(String[] args) throws InterruptedException {
         new EchoClient("127.0.0.1",9999).start();

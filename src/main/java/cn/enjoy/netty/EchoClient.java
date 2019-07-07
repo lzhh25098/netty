@@ -1,6 +1,7 @@
 package cn.enjoy.netty;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -35,6 +36,10 @@ public class EchoClient {
                .remoteAddress(new InetSocketAddress(host,port))
                 //入站处理器
                .handler(new EchoClientHabdler());
+               //链接并且阻塞，直到链接完成
+        ChannelFuture f = bootstrap.connect().sync();
+        //阻塞直到发生关闭事件
+        f.channel().closeFuture().sync();
 
     }
     public static void main(String[] args) throws InterruptedException {

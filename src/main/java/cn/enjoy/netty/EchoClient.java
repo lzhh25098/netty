@@ -5,6 +5,8 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.net.InetSocketAddress;
+
 
 /**
  * lzhh
@@ -26,13 +28,14 @@ public class EchoClient {
         EventLoopGroup eventLoopGroup = new NioEventLoopGroup();
 //启动必须，做一些初始化工作
         Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(eventLoopGroup)
+        bootstrap.group(eventLoopGroup)//把线程组传入
                 //指定使用nio进行网络通信
-                .channel(NioSocketChannel.class);//把线程组传入
+                .channel(NioSocketChannel.class)
+                /*链接端口ip建立链接*/
+               .remoteAddress(new InetSocketAddress(host,port))
+                //入站处理器
+               .handler(new EchoClientHabdler());
 
-        
-
-        
     }
     public static void main(String[] args) throws InterruptedException {
         new EchoClient("127.0.0.1",9999).start();
